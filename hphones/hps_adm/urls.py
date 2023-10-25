@@ -25,6 +25,6 @@ urlpatterns = [
     path('add_ban',add_ban,name='add_ban'),
     path('banner',banner,name='banner'),
     path('up_ban<int:ban_id>',up_ban,name='up_ban'),
-    path('ban_mgmt',ban_mgmt,name='ban_mgmt'),
+    path('active_banner<int:banner_id>',active_banner,name='active_banner'),
 ]
 

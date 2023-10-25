@@ -44,7 +44,7 @@ def adm_login(request):
 
 def view_cat(request):
     if request.user.is_superuser:
-        cat=Category.objects.all()
+        cat=Category.objects.all().order_by('-id')
         context={'cat':cat}
         return render(request,"adm/view_cat.html",context)
     else:
@@ -52,7 +52,7 @@ def view_cat(request):
 
 def view_brd(request):
     if request.user.is_superuser:
-        brd=Brand.objects.all()
+        brd=Brand.objects.all().order_by('-id')
         context={'brd':brd}
         return render(request,"adm/view_brd.html",context)
     else:
@@ -60,7 +60,7 @@ def view_brd(request):
     
 def view_prd(request):
     if request.user.is_superuser:
-        prd=Product.objects.all().select_related('brd_id','cat_id')
+        prd=Product.objects.all().select_related('brd_id','cat_id').order_by('-id')
         context={'prd':prd}
         return render(request,"adm/view_prd.html",context)
     else:
@@ -195,7 +195,7 @@ def up_prd(request,pid):
 
 def variant(request):
     if request.user.is_superuser:
-        prd=PrdVariation.objects.all().select_related('prd_id')
+        prd=PrdVariation.objects.all().select_related('prd_id').order_by('-id')
         context={'prd':prd}
         return render(request,"adm/variation.html",context)
     else:
@@ -303,32 +303,47 @@ def veiw_report(request,order_id):
 def add_ban(request):
     if request.method == "POST":
         banner_name=request.POST['name']
-        banner_image=request.FILES['img']
-        new_banner=Banner(name=banner_name,ban_img=banner_image,status=False)
+        image_1=request.FILES['img1']
+        image_2=request.FILES['img2']
+        image_3=request.FILES['img3']
+        image_4=request.FILES['img4']
+        new_banner=Banner(name=banner_name,ban1_img=image_1,ban2_img=image_2,ban3_img=image_3,ban4_img=image_4,status=False)
         new_banner.save()
+        return redirect(banner)
     return render(request,"adm/add_ban.html")
 
 def banner(request):
-    ban=Banner.objects.all()
+    ban=Banner.objects.all().order_by('-id')
     return render(request,"adm/banner.html",{'ban':ban})
 
 def up_ban(request,ban_id):
     ban=Banner.objects.get(id=ban_id)
     if request.method == "POST":
-        banner_image=request.FILES.get('img')
-        if banner_image:
-            ban.name=request.POST['name']
-            ban.ban_img=request.FILES.get('img')
-            ban.status=request.POST['status']
-            ban.save()
-            return redirect(banner)
-        else:
-            ban.name=request.POST['name']
-            ban.status=request.POST['status']
-            ban.save()
-            return redirect(banner)
+        banner1_image=request.FILES.get('img1')
+        banner2_image=request.FILES.get('img2')
+        banner3_image=request.FILES.get('img3')
+        banner4_image=request.FILES.get('img4')
+        if banner1_image:
+            ban.ban1_img=banner1_image
+        if banner2_image:
+            ban.ban2_img=banner2_image
+        if banner3_image:
+            ban.ban3_img=banner3_image
+        if banner4_image:
+            ban.ban4_img=banner4_image
+        ban.name=request.POST['name']
+        ban.save()
+        return redirect(banner)
     return render(request,"adm/up_ban.html",{'ban':ban})
 
-def ban_mgmt(request):
+# def ban_mgmt(request):
+#     ban=Banner.objects.all()
+#     return render(request,"adm/ban_mgmt.html",{'ban':ban})
+
+def active_banner(request,banner_id):
     ban=Banner.objects.all()
-    return render(request,"adm/ban_mgmt.html",{'ban':ban})
+    ban.update(status=False)
+    ban=Banner.objects.get(id=banner_id)
+    ban.status=True
+    ban.save()
+    return redirect(banner)

@@ -459,7 +459,7 @@
       <li class="nav-heading"></li>
 
       <li class="nav-item">
-        <a class="nav-link " href="{% url "view_cat" %}">
+        <a class="nav-link collapsed" href="{% url "view_cat" %}">
           <i class="bi bi-person"></i>
           <span>Category</span>
         </a>
@@ -487,9 +487,9 @@
       </li><!-- End Register Page Nav -->
 
       <li class="nav-item">
-        <a class="nav-link collapsed" href="pages-login.html">
+        <a class="nav-link " href="{% url "banner" %}">
           <i class="bi bi-box-arrow-in-right"></i>
-          <span>Login</span>
+          <span>Banner</span>
         </a>
       </li><!-- End Login Page Nav -->
 
@@ -538,6 +538,7 @@
                 <thead>
                   <tr>
                     <th scope="col">Name</th>
+                    <th scope="col">Activity</th>
                     <th scope="col">Image</th>
                     <th scope="col">Action</th>
                   </tr>
@@ -546,9 +547,9 @@
                   {% for b in ban %}
                   <tr>
                     <td>{{b.name}}</td>
-                    
-                    <td><img src="{{b.ban_img.url}}" style="height:50px;width:50px;"></td>
-                    <td>&nbsp<a href="{% url "up_ban" b.id%}"><i class="bi bi-pen"></i></a>&nbsp&nbsp<a href=""><i class="bi bi-trash"></i></a></td>
+                    <td><a href="{% url "active_banner" b.id%}">{% if b.status %}<span class="badge rounded-pill bg-primary">Active</span>{% else %}<span class="badge rounded-pill bg-warning text-dark">Inactive</span>{% endif %}</a></td>
+                    <td><img src="{{b.ban1_img.url}}" style="height:50px;width:50px;"></td>
+                    <td>&nbsp<a href="{% url "up_ban" b.id%}"><i class="bi bi-pen"></i></a></td>
                   </tr>
                   {% endfor %}
                   {% comment %} <tr>

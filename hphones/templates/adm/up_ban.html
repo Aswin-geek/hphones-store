@@ -459,7 +459,7 @@
       <li class="nav-heading"></li>
 
       <li class="nav-item">
-        <a class="nav-link " href="{% url "view_cat" %}">
+        <a class="nav-link collapsed" href="{% url "view_cat" %}">
           <i class="bi bi-person"></i>
           <span>Category</span>
         </a>
@@ -487,9 +487,9 @@
       </li><!-- End Register Page Nav -->
 
       <li class="nav-item">
-        <a class="nav-link collapsed" href="pages-login.html">
+        <a class="nav-link " href="{% url "banner" %}">
           <i class="bi bi-box-arrow-in-right"></i>
-          <span>Login</span>
+          <span>Banner</span>
         </a>
       </li><!-- End Login Page Nav -->
 
@@ -541,9 +541,21 @@
 
                 <div class="col-md-12 ">
                   <label for="logo" class="form-label">Image</label>
-                  <input type="file" id="logo" class="form-control" name="img" accept="image/*">
+                  <input type="file" id="logo" class="form-control" name="img1" accept="image/*">
                 </div>
-                <div class="col-md-12">
+                <div class="col-md-12 ">
+                  <label for="logo" class="form-label">Image</label>
+                  <input type="file" id="logo" class="form-control" name="img2" accept="image/*">
+                </div>
+                <div class="col-md-12 ">
+                  <label for="logo" class="form-label">Image</label>
+                  <input type="file" id="logo" class="form-control" name="img3" accept="image/*">
+                </div>
+                <div class="col-md-12 ">
+                  <label for="logo" class="form-label">Image</label>
+                  <input type="file" id="logo" class="form-control" name="img4" accept="image/*">
+                </div>
+                {% comment %} <div class="col-md-12">
                     <div class="form-check">
                       <input class="form-check-input" type="radio" name="status" id="gridRadios1" value="True"{% if ban.status %} checked{% endif %}>
                       <label class="form-check-label" for="gridRadios1">
@@ -556,7 +568,7 @@
                         Unlist
                       </label>
                     </div>
-                  </div>
+                  </div> {% endcomment %}
                 <div class="col-md-12" align="center">
                   <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
@@ -578,7 +590,22 @@
           <div class="row">
             <div class="col-lg-6">
               <div class="info-box card">
-                <img src="{{ban.ban_img.url}}" style="height:200px;width:155px;">
+                <img src="{{ban.ban1_img.url}}" style="height:200px;width:155px;">
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="info-box card">
+                <img src="{{ban.ban2_img.url}}" style="height:200px;width:155px;">
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="info-box card">
+                <img src="{{ban.ban3_img.url}}" style="height:200px;width:155px;">
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="info-box card">
+                <img src="{{ban.ban4_img.url}}" style="height:200px;width:155px;">
               </div>
             </div>
             {% comment %} <div class="col-lg-6">

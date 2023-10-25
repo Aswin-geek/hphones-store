@@ -487,9 +487,9 @@
       </li><!-- End Register Page Nav -->
 
       <li class="nav-item">
-        <a class="nav-link collapsed" href="pages-login.html">
+        <a class="nav-link collapsed" href="{% url "banner" %}">
           <i class="bi bi-box-arrow-in-right"></i>
-          <span>Login</span>
+          <span>Banner</span>
         </a>
       </li><!-- End Login Page Nav -->
 
@@ -553,7 +553,7 @@
                     <td>{{p.color}}</td>
                     <td>{{p.stock}}</td>
                     <td>{{p.cur_price}}</td>
-                    <td>&nbsp<a href="{% url "up_var" p.id%}"><i class="bi bi-pen"></i></a>&nbsp&nbsp<a href=""><i class="bi bi-trash"></i></a></td>
+                    <td>&nbsp<a href="{% url "up_var" p.id%}"><i class="bi bi-pen"></i></a></td>
                   </tr>
                   {% endfor %}
                   {% comment %} <tr>

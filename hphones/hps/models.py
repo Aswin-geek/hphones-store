@@ -77,5 +77,8 @@ class Order(models.Model):
     
 class Banner(models.Model):
     name=models.CharField(max_length=20)
-    ban_img=models.FileField(upload_to='images')
+    ban1_img=models.FileField(upload_to='images')
+    ban2_img=models.FileField(upload_to='images',blank=True, null=True)
+    ban3_img=models.FileField(upload_to='images',blank=True, null=True)
+    ban4_img=models.FileField(upload_to='images',blank=True, null=True)
     status=models.BooleanField(default=False)
