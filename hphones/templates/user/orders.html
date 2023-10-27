@@ -1125,6 +1125,19 @@ RIGHT SIDEBAR TOGGLE SECTION
 								<td class="invert">{{o.status}}</td>
 								<td class="invert">
 									<a href="{% url "ord_details" o.id %}" class="btn btn-style btn-style-secondary mt-3">View Order</a>
+									{% now "Y-m-d" as todays_date %}
+									{% if "Return"  in o.status %}
+
+									{% elif "Cancelled" in o.status %}
+			
+									{% elif "Delivered" in o.status and todays_date < o.return_date|date:"Y-m-d" %}
+									<a href="{% url "return_order" o.id %}" class="btn btn-style btn-style-secondary mt-3">Return Order</a>
+									{% elif "Delivered" in o.status %}
+									
+									{% else %}
+									<a href="{% url "cancel_order" o.id %}" class="btn btn-style btn-style-secondary mt-3">Cancel Order</a>
+									{% endif %}
+									
 								</td>
 							</tr>
 							{% endfor %}

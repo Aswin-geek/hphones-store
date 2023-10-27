@@ -296,6 +296,9 @@ def veiw_report(request,order_id):
     context={'order_details':order_details,'order_items':order_items,'addrress':addrress}
     if request.method == "POST":
         order_details.status=request.POST['status']
+        r_date=request.POST['return_date']
+        if r_date:
+            order_details.return_date=r_date
         order_details.save()
         return redirect(reports)
     return render(request,"adm/view_report.html",context)

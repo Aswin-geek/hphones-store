@@ -9,6 +9,7 @@ import razorpay
 from django.views.decorators.csrf import csrf_exempt
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import F
+from django.core.mail import send_mail
 # Create your views here.
 
 
@@ -39,6 +40,9 @@ def register(request):
         else:
             new_user=User.objects.create_user(username=uname,email=uemail,password=upass)
             new_user.save()
+            get_user=User.objects.get(email=uemail)
+            new_wallet=Wallet(balance=0,user_id=get_user.id)
+            new_wallet.save()
             return redirect('index')
     return render(request,"user/register.html")
 
@@ -224,17 +228,24 @@ def checkout(request,ad_id):
 def create_order(request,ad_id):
     crt=Cart.objects.filter(user=request.user,val=False)
     ord_list=[]
+    item_list=[]
     tot=0
     for c in crt:  
         sub=c.qty*c.prd_var.cur_price
         tot+=sub
         ord_item=OrderItem(item=c.prd_var,qty=c.qty,sub_tot=sub)
+        item=Product.objects.get(id=c.prd_id_id)
+        item_list.append(item.prd_name)
         ord_item.save()
         c.val=True
         c.save()
         print(ord_item)
         ord_list.append(ord_item)
-    new_order=Order.objects.create(user=request.user,tot_amount=tot,del_add_id=ad_id,status="Pending")   
+    new_order=Order.objects.create(user=request.user,tot_amount=tot,del_add_id=ad_id,status="Pending")
+    item_string=' '.join(item_list)  
+    notification_description="Your order containing "+item_string+" has been placed." 
+    notify=Notification(description=notification_description,user=request.user)
+    notify.save()
     for ord in ord_list:
         new_order.new_order.add(ord)
     new_order.save()
@@ -291,3 +302,30 @@ def ord_details(request,or_id):
 
 def sample(request):
     return render(request,"user/sample.html")
+
+
+def cancel_order(request,order_id):
+    order=Order.objects.get(id=order_id)
+    order.status="Cancelled"
+    if(order.pay_method=="Razor Pay"):
+        refund=order.tot_amount
+        get_wallet=Wallet.objects.get(user_id=request.user)
+        get_wallet.balance=get_wallet.balance+refund
+        get_wallet.save()
+    order.save()
+    return redirect(orders)
+
+def return_order(request,order_id):
+    order=Order.objects.get(id=order_id)
+    order.status="Return"
+    if(order.pay_method=="Razor Pay"):
+        refund=order.tot_amount
+        get_wallet=Wallet.objects.get(user_id=request.user)
+        get_wallet.balance=get_wallet.balance+refund
+        get_wallet.save()
+    order.save()
+    return redirect(orders)
+    
+def notification(request):
+    notifications=Notification.objects.filter(user=request.user)
+    return render(request,"user/notification.html",{'notifications':notifications})

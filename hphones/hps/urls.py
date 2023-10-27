@@ -24,6 +24,9 @@ urlpatterns = [
     path('orders',orders,name='orders'),
     path('ord_details<int:or_id>',ord_details,name='ord_details'),
     path('sample',sample,name='sample'),
+    path('cancel_order<int:order_id>',cancel_order,name='cancel_order'),
+    path('return_order<int:order_id>',return_order,name='return_order'),
+    path('notification',notification,name='notification'),
 ]
 
 

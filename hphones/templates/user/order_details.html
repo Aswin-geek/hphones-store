@@ -892,10 +892,7 @@ RIGHT SIDEBAR TOGGLE SECTION
 						<!-- search -->
 						<div class="col-lg-9 col-sm-8 agileits_search">
 							<form class="form-inline" action="#" method="post" style="max-width:600px;">
-								<input class="form-control" type="search"
-									placeholder="Search for products, brands and more" aria-label="Search" required>
-								<button class="btn" type="submit"><i class="fa fa-search"
-										aria-hidden="true"></i></button>
+								
 							</form>
 						</div>
 						<!-- //search -->
@@ -910,8 +907,7 @@ RIGHT SIDEBAR TOGGLE SECTION
 											<label class="theme-switch" for="checkbox">
 												<input type="checkbox" id="checkbox">
 												<div class="mode-container">
-													<i class="gg-sun"></i>
-													<i class="gg-moon"></i>
+													
 												</div>
 											</label>
 										</div>
@@ -1214,6 +1210,12 @@ RIGHT SIDEBAR TOGGLE SECTION
 					</table>
 
 				</div>
+				{% now "Y-m-d" as todays_date %}
+				{% if todays_date < ord_data.return_date|date:"Y-m-d" %}
+				<div class="col-md-5 contact-left">
+					<h3 class="title-style font-weight-bold mb-4">Last date to return : {{ord_data.return_date}}</h3>
+				</div>
+				{% endif %}
 				<div class="col-md-5 contact-left">
 					<h3 class="title-style font-weight-bold mb-4">Order Total : {{ord_data.tot_amount}}</h3>
 				</div>
@@ -1252,19 +1254,24 @@ RIGHT SIDEBAR TOGGLE SECTION
 			</div>
 		</div>
 	</div>
-	<div class="card">
+	{% comment %} <div class="card">
 		<div class="header">
 		  <div>
 			<a class="title" href="#">
-			  Building a SaaS product as a software developer
+				Name: {{addr.name}}
 			</a>
-			<p class="name">By John Doe</p>
+			<p class="name">Contact: {{addr.ph_no}}</p>
 		  </div>
 			<span class="image"></span>
 		</div>
 		  <p class="description">
-			Lorem ipsum dolor sit, amet consectetur adipisicing elit. At velit illum
-			provident a, ipsa maiores deleniti consectetur nobis et eaque.
+			<li>Address: {{addr.addr}}</li>
+								<p>Pin: {{addr.pin}}</p>
+								<p>Area: {{addr.area}}</p>
+								<p>City: {{addr.city}}</p>
+								<p>State: {{addr.state}}</p>
+								<p>Type: {{addr.type}}</p>
+								<p>Contact: {{addr.ph_no}}</p>
 		  </p>
 		<dl class="post-info">
 		  <div class="cr">
@@ -1276,7 +1283,7 @@ RIGHT SIDEBAR TOGGLE SECTION
 			<dd class="dd">3 minute</dd>
 		  </div>
 		</dl>
-	  </div>
+	  </div> {% endcomment %}
 	
 	<!-- //checkout page -->
 

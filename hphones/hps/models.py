@@ -74,6 +74,8 @@ class Order(models.Model):
     status=models.CharField(max_length=20, default="Pending")
     created_at=models.DateField(default=timezone.now)
     pay_method=models.CharField(max_length=20,blank=True, null=True)
+    return_date=models.DateField(blank=True, null=True)
+    
     
 class Banner(models.Model):
     name=models.CharField(max_length=20)
@@ -82,3 +84,12 @@ class Banner(models.Model):
     ban3_img=models.FileField(upload_to='images',blank=True, null=True)
     ban4_img=models.FileField(upload_to='images',blank=True, null=True)
     status=models.BooleanField(default=False)
+    
+class Wallet(models.Model):
+    user=models.ForeignKey(User, on_delete=models.CASCADE)
+    balance=models.FloatField()
+    
+class Notification(models.Model):
+    user=models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at=models.DateField(default=timezone.now)
+    description=models.CharField(max_length=50)
