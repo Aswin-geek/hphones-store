@@ -47,7 +47,7 @@ class Cart(models.Model):
 class Address(models.Model):
     CHOICES = [
         ('Home', 'Home'),
-        ('Work', 'Work'),
+        ('Office', 'Office'),
     ]
     user=models.ForeignKey(User, on_delete=models.CASCADE)
     name=models.CharField(max_length=20)
@@ -58,12 +58,17 @@ class Address(models.Model):
     city=models.CharField(max_length=20)
     state=models.CharField(max_length=20)
     type=models.CharField(max_length=10,choices=CHOICES,)
+    remove_address=models.BooleanField(default=True)
     
 class OrderItem(models.Model):
     item=models.ForeignKey(PrdVariation, on_delete=models.CASCADE)
     qty=models.IntegerField()
     sub_tot=models.FloatField()
     status = models.CharField(max_length=20, default="Order Placed")
+    
+class Coupon(models.Model):
+    code=models.CharField(max_length=20)
+    value=models.CharField(max_length=5)
     
 class Order(models.Model):
     new_order=models.ManyToManyField(OrderItem)
@@ -75,6 +80,7 @@ class Order(models.Model):
     created_at=models.DateField(default=timezone.now)
     pay_method=models.CharField(max_length=20,blank=True, null=True)
     return_date=models.DateField(blank=True, null=True)
+    coupon_apply=models.ForeignKey(Coupon, on_delete=models.CASCADE,blank=True, null=True)
     
     
 class Banner(models.Model):
@@ -93,3 +99,8 @@ class Notification(models.Model):
     user=models.ForeignKey(User, on_delete=models.CASCADE)
     created_at=models.DateField(default=timezone.now)
     description=models.CharField(max_length=50)
+
+class Wishlist(models.Model):
+    user=models.ForeignKey(User, on_delete=models.CASCADE)
+    item=models.ForeignKey(PrdVariation, on_delete=models.CASCADE)
+    

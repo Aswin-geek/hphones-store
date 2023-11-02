@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,HttpResponse
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
@@ -10,6 +10,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import F
 from django.core.mail import send_mail
+from django.template.loader import get_template
+from weasyprint import HTML
 # Create your views here.
 
 
@@ -60,7 +62,7 @@ def user_login(request):
             return redirect('/')
         else:
             messages.error(request,"Invalid Credentails")
-            return redirect('/login')
+            return redirect('user_login')
     return render(request,"user/login.html")
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)      
@@ -76,8 +78,9 @@ def view_prod(request,pid):
     prdt=PrdVariation.objects.filter(prd_id_id=prd1.prd_id_id) # display other product variations
     if request.user.is_authenticated:
         ch_pr=Cart.objects.filter(prd_var=pid,user=request.user,val=False)
+        wl_pr=Wishlist.objects.filter(item=pid,user=request.user)
     # pdimg=PrdImage.objects.get(prd_id=pid)
-        context={'cat':cat,'prd':prd,'prdt':prdt,'ch_pr':ch_pr}
+        context={'cat':cat,'prd':prd,'prdt':prdt,'ch_pr':ch_pr,'wl_pr':wl_pr}
         return render(request,"user/product.html",context)
     context={'cat':cat,'prd':prd,'prdt':prdt,}
     return render(request,"user/product.html",context)
@@ -155,7 +158,7 @@ def add_add(request):
 def view_add(request):
     if request.user.is_authenticated:
         cur_user=request.user
-        adds=Address.objects.filter(user=cur_user)
+        adds=Address.objects.filter(user=cur_user,remove_address=True)
         return render(request,"user/add_add.html",{'adds':adds})
     else:
         return redirect(user_login)
@@ -221,6 +224,8 @@ def checkout(request,ad_id):
     for p in crt:
         tot=tot+p.prd_var.cur_price * p.qty
     r_tot=tot*100
+    
+        
     context={'crt':crt,'addr':addr,'tot':tot,'r_tot':r_tot}
     return render(request,"user/checkout.html",context)
 
@@ -277,7 +282,7 @@ def r_paid(request,or_id):
 
 def orders(request):
     if request.user.is_authenticated:
-        ord=Order.objects.filter(user_id=request.user)
+        ord=Order.objects.filter(user_id=request.user).order_by('-id')
         return render(request,"user/orders.html",{'ord':ord})
     else:
         return redirect(user_login)
@@ -329,3 +334,91 @@ def return_order(request,order_id):
 def notification(request):
     notifications=Notification.objects.filter(user=request.user)
     return render(request,"user/notification.html",{'notifications':notifications})
+
+def address(request):
+    user_address=Address.objects.filter(user=request.user,remove_address=True)
+    return render(request,"user/address.html",{'user_address':user_address})
+
+def edit_address(request,address_id):
+    user_address=Address.objects.get(id=address_id)
+    if request.method == "POST":
+        user_address.remove_address=False
+        user_address.save()
+        name=request.POST['name'] 
+        addr=request.POST['addr'] 
+        pin=request.POST['pin'] 
+        ph_no=request.POST['ph_no'] 
+        area=request.POST['area'] 
+        city=request.POST['city'] 
+        state=request.POST['state'] 
+        type=request.POST['type']
+        new_add=Address(user=request.user,name=name,addr=addr,pin=pin,ph_no=ph_no,area=area,city=city,state=state,type=type)
+        new_add.save()
+        return redirect(address)
+    return render(request,"user/view_address.html",{'user_address':user_address})
+
+def add_wishlist(request,variant_id):
+    if request.user.is_authenticated:
+        product=Wishlist(item_id=variant_id,user=request.user)
+        product.save()
+        return redirect(view_wishlist)
+    else:
+        return redirect(user_login)
+    
+def view_wishlist(request):
+    if request.user.is_authenticated:
+        wishlist_items=Wishlist.objects.filter(user=request.user).select_related('item') 
+        return render(request,"user/wishlist.html",{'wishlist_items':wishlist_items})    
+    else:
+        return redirect(user_login)
+    
+def remove_wishlist(request,wishlist_id):
+    wishlist_item=Wishlist.objects.get(id=wishlist_id)
+    wishlist_item.delete()
+    return redirect(view_wishlist)
+    
+def profile(request):
+    if request.user.is_authenticated:
+        user_details=User.objects.get(username=request.user)
+        balance=Wallet.objects.get(user=user_details.id)
+        context={'user_details':user_details,'balance':balance}
+        return render(request,"user/profile.html",context)
+    else:
+        return redirect(user_login)
+
+def invoice(request,or_id):
+    ord=Order.objects.get(id=or_id).new_order.all().select_related('item')
+    ord_data=Order.objects.get(id=or_id)
+    addr=Address.objects.get(id=ord_data.del_add_id)
+    context={'ord':ord,'addr':addr,'ord_data':ord_data}
+    html_string = get_template('user/invoice.html').render(context)
+
+    # Convert HTML to PDF
+    html = HTML(string=html_string)
+    pdf_file = html.write_pdf()
+
+    # Create an HTTP response with the PDF
+    response = HttpResponse(pdf_file, content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="invoice_.pdf"'
+
+    return response
+
+def apply_coupon(request):
+    cur_user=request.user
+    crt=Cart.objects.filter(user=cur_user,val=False).select_related('prd_id')
+    tot=0
+    for p in crt:
+        tot=tot+p.prd_var.cur_price * p.qty
+    context={'crt':crt,'tot':tot}
+    if request.method == "POST":
+        code=request.POST['code']
+        if Coupon.objects.filter(code=code).exists():
+            request.session['coupon']=code
+            print(request.session['coupon'])
+            return render(request,"user/cart1.html",context)
+        else:
+            messages.info(request,"Invalid Coupon")
+            return render(request,"user/cart1.html",context)
+    
+          
+    

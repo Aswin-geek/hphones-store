@@ -14,7 +14,6 @@ def adm_index(request):
     if request.user.is_superuser:
         item_count=OrderItem.objects.filter(status='Order Placed').count()
         total_revenue=OrderItem.objects.filter(status='Order Placed').aggregate(order_sum=Sum('sub_tot'))['order_sum'] or 0
-        print(total_revenue)
         active_customers=User.objects.filter(is_active=True).count()
         order_counts = Order.objects.annotate(month=ExtractMonth('created_at')).annotate(year=ExtractYear('created_at')).values('year', 'month').annotate(count=Count('id'))
         month_counts = [0] * 12
@@ -173,7 +172,6 @@ def add_prd(request):
     
     
 def up_prd(request,pid):
-    print(pid)
     prd=Product.objects.filter(id=pid).select_related('brd_id','cat_id')[0]
     cat=Category.objects.filter(cat_status=True)
     brd=Brand.objects.filter(brd_status=True)
@@ -236,6 +234,7 @@ def up_var(request,pid):
             prd.stock=request.POST['stock']
             prd.cur_price=request.POST['cprice']
             prd.max_price=request.POST['mprice']
+            prd.prd_status=request.POST['status']
             img1=request.FILES.get('img1')
             img2=request.FILES.get('img2')
             img3=request.FILES.get('img3')
@@ -257,7 +256,7 @@ def up_var(request,pid):
     
 
 def reports(request):
-    all_report=Order.objects.all().select_related('user')
+    all_report=Order.objects.all().select_related('user').order_by('-id')
     context={'all_report':all_report}
     return render(request,"adm/reports.html",context)
 
@@ -267,7 +266,7 @@ def reports(request):
 def date_report(request):
     if request.method == "POST":
         selected_date=request.POST['selected_date']
-        all_report=Order.objects.filter(created_at=selected_date)
+        all_report=Order.objects.filter(created_at=selected_date).order_by('-id')
         context={'all_report':all_report,'selected_date':selected_date}
         return render(request,"adm/date_report.html",context)
     return render(request,"adm/date_report.html")
@@ -276,7 +275,7 @@ def week_report(request):
     if request.method == "POST":
         start_date=request.POST['start_date']
         end_date=request.POST['end_date']
-        all_report=Order.objects.filter(created_at__range=(start_date, end_date))
+        all_report=Order.objects.filter(created_at__range=(start_date, end_date)).order_by('-id')
         context={'all_report':all_report,'start_date':start_date,'end_date':end_date}
         return render(request,"adm/week_report.html",context)
     return render(request,"adm/week_report.html")
@@ -284,7 +283,7 @@ def week_report(request):
 def year_report(request):
     if request.method == "POST":
         selected_year=request.POST['selected_year']
-        all_report=Order.objects.filter(created_at__year=selected_year)
+        all_report=Order.objects.filter(created_at__year=selected_year).order_by('-id')
         context={'all_report':all_report,'selected_year':selected_year}
         return render(request,"adm/year_report.html",context)
     return render(request,"adm/year_report.html")
@@ -350,3 +349,20 @@ def active_banner(request,banner_id):
     ban.status=True
     ban.save()
     return redirect(banner)
+
+def add_coupon(request):
+    if request.method == "POST":
+        code=request.POST['code']
+        value=request.POST['value']
+        if Coupon.objects.filter(code__iexact=code).exists():
+            messages.error(request,"Coupon already exists")
+        else:
+            new_coupon=Coupon(code=code,value=value)
+            new_coupon.save()
+            return redirect(view_coupon)
+    return render(request,"adm/add_coupon.html")
+
+def view_coupon(request):
+    coupons=Coupon.objects.all().order_by('-id')
+    return render(request,"adm/view_coupon.html",{'coupons':coupons})
+        

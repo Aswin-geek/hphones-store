@@ -141,3 +141,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 RAZOR_KEY_ID = "rzp_test_DLTeq2nNMzXQkj"
 RAZOR_KEY_SECRET = "bmng64HRS0muDq1yCGX0m8YS"
+
+GTK_FOLDER = r'C:\Program Files\GTK3-Runtime Win64\bin'
+os.environ['PATH'] = GTK_FOLDER + os.pathsep + os.environ.get('PATH', '')

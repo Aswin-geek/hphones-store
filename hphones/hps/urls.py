@@ -27,6 +27,14 @@ urlpatterns = [
     path('cancel_order<int:order_id>',cancel_order,name='cancel_order'),
     path('return_order<int:order_id>',return_order,name='return_order'),
     path('notification',notification,name='notification'),
+    path('address',address,name='address'),
+    path('edit_address<int:address_id>',edit_address,name='edit_address'),
+    path('add_wishlist<int:variant_id>',add_wishlist,name='add_wishlist'),
+    path('view_wishlist',view_wishlist,name='view_wishlist'),
+    path('remove_wishlist<int:wishlist_id>',remove_wishlist,name='remove_wishlist'),
+    path('profile',profile,name='profile'),
+    path('invoice<int:or_id>',invoice,name='invoice'),
+    path('apply_coupon',apply_coupon,name='apply_coupon'),
 ]
 
 

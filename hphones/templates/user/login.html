@@ -68,13 +68,7 @@ if(typeof _bsa !== 'undefined' && _bsa) {
 <meta name="robots" content="noindex">
 <body><link rel="stylesheet" href="../../../../../../assests/css/font-awesome.min.css">
 <!-- New toolbar-->
-{% comment %} {% if messages %}
-        {% for message in messages %}
-         {% if message.tags %}  <script>alert("{{ message }}")</script> {% endif %}
 
-        {% endfor %}
-
-    {% endif %} {% endcomment %}
 <style>
 * {
   box-sizing: border-box;
@@ -221,9 +215,8 @@ RIGHT SIDEBAR TOGGLE SECTION
     <div class="modal-content">
         <div class="modal-header">
             <h5 class="modal-title text-center">Log In</h5>
-            {% comment %} <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span> {% endcomment %}
-            </button>
+            
+            
         </div>
         <div class="modal-body">
             <form action="#" method="post">
@@ -245,33 +238,16 @@ RIGHT SIDEBAR TOGGLE SECTION
                 </div>
                 <div class="sub-w3l">
                     <div class="custom-control custom-checkbox mr-sm-2">
-                        {% comment %} <input type="checkbox" class="custom-control-input" id="customControlAutosizing">
-                        <label class="custom-control-label" for="customControlAutosizing">Remember me?</label> {% endcomment %}
+                        
                     </div>
                 </div>
                 <p class="text-center dont-do mt-3">Don't have an account?
                     <a href="{% url "register" %}" data-toggle="modal" data-target="#exampleModal2">
                         Register Now</a>
                 </p>
-                {% comment %} <p class="text-center dont-do mt-3">(Or)</p> {% endcomment %}
+                
                 <div class="social text-center mt-2">
-                    {% comment %} <ul class="list-unstyled">
-                        <li class="d-inline">
-                            <a class="icon fb" href="#facebook">
-                                <i class="fab fa-facebook-f"></i>
-                            </a>
-                        </li>
-                        <li class="d-inline mx-1">
-                            <a class="icon tw" href="#twitter">
-                                <i class="fab fa-twitter"></i>
-                            </a>
-                        </li>
-                        <li class="d-inline">
-                            <a class="icon gp" href="#google-plus">
-                                <i class="fab fa-google-plus-g"></i>
-                            </a>
-                        </li>
-                    </ul> {% endcomment %}
+                    
                 </div>
             </form>
         </div>
@@ -280,13 +256,7 @@ RIGHT SIDEBAR TOGGLE SECTION
 
 
 
-{% comment %} <div class="copy-right py-3">
-    <div class="container">
-        <p class="text-center ">© 2021 Electronics Mart. All rights reserved | Design by
-            <a href="https://w3layouts.com/"> W3layouts.</a>
-        </p>
-    </div>
-</div> {% endcomment %}
+
 <!-- //copyright -->
 
 <!-- js-files -->
