@@ -25,7 +25,7 @@ Author URL: http://w3layouts.com
 	<!-- Font-Awesome-Icons-CSS -->
 	<link href="{% static "user/css/popuo-box.css" %}" rel="stylesheet" type="text/css" media="all" />
 	<!-- pop-up-box -->
-	<link href="{% static "user/css/menu.css"%}" rel="stylesheet" type="text/css" media="all" />
+	<link href="{% static "user/css/menu.css" %}" rel="stylesheet" type="text/css" media="all" />
 	<!-- menu style -->
 
 	<!-- //Custom-Files -->
@@ -283,16 +283,16 @@ RIGHT SIDEBAR TOGGLE SECTION
 
 							{% if not request.user.is_authenticated %}
 							<li class="mx-3">
-								<a href="{% url " user_login" %}" class="">
+								<a href="/user_login" class="">
 									<i class="fas fa-sign-in-alt mr-1"></i> Log In </a>
 							</li>
 							<li>
-								<a href="{% url " register" %}" class="">
+								<a href="/register" class="">
 									<i class="fas fa-sign-out-alt mr-1"></i>Register </a>
 							</li>
 							{% else %}
 							<li class="mx-3">
-								<a href="{% url " user_logout" %}" class="">
+								<a href="/user_login" class="">
 									<i class="fas fa-sign-in-alt mr-1"></i> Log Out </a>
 							</li>
 							{% endif %}
@@ -330,7 +330,7 @@ RIGHT SIDEBAR TOGGLE SECTION
 						<div class="row">
 							<!-- search -->
 							<div class="col-lg-9 col-sm-8 agileits_search">
-								<form class="form-inline" action="{% url " search_result" %}" method="post"
+								<form class="form-inline" action="{% url "search_result" %}" method="post"
 									style="max-width:600px;">
 									{% csrf_token %}
 									<input class="form-control" type="search" name="s_value"
@@ -362,13 +362,13 @@ RIGHT SIDEBAR TOGGLE SECTION
 								</div>
 								{% if request.user.is_authenticated %}
 								<div class="cart-store">
-									<a href="{% url " view_wishlist" %}"><i class="far fa-heart"></i></a>
+									<a href="{% url "view_wishlist" %}"><i class="far fa-heart"></i></a>
 								</div>
 								{% endif %}
 								<div class="wthreecartaits wthreecartaits2 cart cart box_1">
 									{% if request.user.is_authenticated %}
 
-									<a href="{% url " cart" %}"><img src="{% static " user/images/cart.png" %}" alt=""
+									<a href="{% url "cart" %}"><img src="{% static " user/images/cart.png" %}" alt=""
 											class="img-fluid"> Cart</a>
 
 									{% endif %}
@@ -399,23 +399,23 @@ RIGHT SIDEBAR TOGGLE SECTION
 					<div class="collapse navbar-collapse" id="navbarSupportedContent">
 						<ul class="navbar-nav text-center ml-auto">
 							<li class="nav-item active mr-lg-2 mb-lg-0 mb-2">
-								<a class="nav-link" href="{% url " index" %}">Home
+								<a class="nav-link" href="{% url "index" %}">Home
 									<span class="sr-only">(current)</span>
 								</a>
 							</li>
 
 							{% if request.user.is_authenticated %}
 							<li class="nav-item">
-								<a class="nav-link" href="{% url " profile" %}">Profile</a>
+								<a class="nav-link" href="{% url "profile" %}">Profile</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="{% url " notification" %}">Notifications</a>
+								<a class="nav-link" href="{% url "notification" %}">Notifications</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="{% url " address" %}">Addresses</a>
+								<a class="nav-link" href="{% url "address" %}">Addresses</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="{% url " orders" %}">Orders</a>
+								<a class="nav-link" href="{% url "orders" %}">Orders</a>
 							</li>
 							{% endif %}
 						</ul>
@@ -503,11 +503,11 @@ RIGHT SIDEBAR TOGGLE SECTION
 								<div class="w3l-range">
 									<ul>
 										<li>
-											<a href="{% url " index" %}">All</a>
+											<a href="{% url "index" %}">All</a>
 										</li>
 										{% for b in brd %}
 										<li>
-											<a href="{% url " brand_wise" b.id %}">{{b.brd_name}}</a>
+											<a href="{% url "brand_wise" b.id %}">{{b.brd_name}}</a>
 										</li>
 										{% endfor %}
 
@@ -520,11 +520,11 @@ RIGHT SIDEBAR TOGGLE SECTION
 								<h3 class="agileits-sear-head mb-3">Category</h3>
 								<ul>
 									<li>
-										<a href="{% url " index" %}">All</a>
+										<a href="{% url "index" %}">All</a>
 									</li>
 									{% for c in cat %}
 									<li>
-										<a href="{% url " cat_wise" c.id %}">{{c.cat_name}}</a>
+										<a href="{% url "cat_wise" c.id %}">{{c.cat_name}}</a>
 									</li>
 									{% endfor %}
 
@@ -551,7 +551,7 @@ RIGHT SIDEBAR TOGGLE SECTION
 												<img src="{{ p.p1_img.url }}" style="width:150px;height:180px;" alt="">
 												<div class="men-cart-pro">
 													<div class="inner-men-cart-pro">
-														<a href="{% url " view_prod" p.id%}"
+														<a href="{% url "view_prod" p.id%}"
 															class="link-product-add-cart">Quick View</a>
 													</div>
 												</div>
