@@ -69,6 +69,7 @@ class OrderItem(models.Model):
 class Coupon(models.Model):
     code=models.CharField(max_length=20)
     value=models.CharField(max_length=5)
+    status=models.BooleanField(default=True)
     
 class Order(models.Model):
     new_order=models.ManyToManyField(OrderItem)

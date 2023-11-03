@@ -28,5 +28,6 @@ urlpatterns = [
     path('active_banner<int:banner_id>',active_banner,name='active_banner'),
     path('add_coupon',add_coupon,name='add_coupon'),
     path('view_coupon',view_coupon,name='view_coupon'),
+    path('edit_coupon<int:coupon_id>',edit_coupon,name='edit_coupon'),
 ]
 

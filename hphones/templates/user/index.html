@@ -292,7 +292,7 @@ RIGHT SIDEBAR TOGGLE SECTION
 							</li>
 							{% else %}
 							<li class="mx-3">
-								<a href="/user_login" class="">
+								<a href="/user_logout" class="">
 									<i class="fas fa-sign-in-alt mr-1"></i> Log Out </a>
 							</li>
 							{% endif %}
@@ -368,7 +368,7 @@ RIGHT SIDEBAR TOGGLE SECTION
 								<div class="wthreecartaits wthreecartaits2 cart cart box_1">
 									{% if request.user.is_authenticated %}
 
-									<a href="{% url "cart" %}"><img src="{% static " user/images/cart.png" %}" alt=""
+									<a href="{% url "cart" %}"><img src="{% static "user/images/cart.png" %}" alt=""
 											class="img-fluid"> Cart</a>
 
 									{% endif %}
@@ -577,23 +577,23 @@ RIGHT SIDEBAR TOGGLE SECTION
 									No Products Available
 									{% endif %}
 								</div>
-								<div class="pagination-style">
-									<ul>
-										<li> <a href="#none" disabled="">
-												<span class="fa fa-angle-double-left" aria-hidden="true"></span>
-											</a>
-										</li>
-
-										<li>
-											<a href="#page"><span class="fa fa-angle-double-right"
-													aria-hidden="true"></span>
-											</a>
-										</li>
-									</ul>
-								</div>
+								
 							</div>
 							<!-- //product left -->
+							<div class="pagination-style">
+								<ul>
+									<li> <a href="#none" disabled="">
+											<span class="fa fa-angle-double-left" aria-hidden="true"></span>
+										</a>
+									</li>
 
+									<li>
+										<a href="#page"><span class="fa fa-angle-double-right"
+												aria-hidden="true"></span>
+										</a>
+									</li>
+								</ul>
+							</div>
 						</div>
 					</div>
 				</div>

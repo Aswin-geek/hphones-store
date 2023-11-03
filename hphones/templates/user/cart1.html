@@ -357,27 +357,7 @@
                                     
                                 </tbody>
                             </table>
-                            {% comment %} <div class="col-md-5 contact-left">
-                              <h3 class="title-style font-weight-bold mb-4">Coupon</h3>
-                              <div class="cont-details">
-                                <div class="d-flex contact-grid">
-                                  <form action="{% url "apply_coupon" %}" method="post">
-                                    {% csrf_token %}
-                                  <div class="cont-right" >
-                                    <div class="form-group">
-                                      <input type="text" class="form-control" placeholder="Coupon Code" name="code" >
-                                    </div>
-                                    <div class="right-w3l">
-                                      <input type="submit" class="form-control" value="Apply">
-                                    </div>
-                                    {% for msg in messages %}
-                                      {{msg}}
-                                    {% endfor %}
-                                  </div>
-                                </form>
-                                </div>
-                              </div>
-                            </div> {% endcomment %}
+                            
                         </div>
                         {% else %}
                         <h4 class="mb-sm-4 mb-3">Cart is Empty</h4>

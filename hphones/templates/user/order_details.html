@@ -472,8 +472,6 @@ RIGHT SIDEBAR TOGGLE SECTION
 								<th>Name</th>
 								<th>Quantity</th>
 								<th>Sub Total</th>
-								
-								
 							</tr>
 						</thead>
 						<tbody>
@@ -498,7 +496,15 @@ RIGHT SIDEBAR TOGGLE SECTION
 				</div>
 				{% endif %}
 				<div class="col-md-5 contact-left">
-					<h3 class="title-style font-weight-bold mb-4">Order Total : {{ord_data.tot_amount}}</h3>
+					<h3 class="title-style font-weight-bold mb-4">Order Total : {{total}}</h3>
+				</div>
+				{% if coupon %}
+				<div class="col-md-5 contact-left">
+					<h3 class="title-style font-weight-bold mb-4">Coupon Applied : {{coupon.code}}</h3>
+				</div>
+				{% endif %}
+				<div class="col-md-5 contact-left">
+					<h3 class="title-style font-weight-bold mb-4">Payable Amount : {{ord_data.tot_amount}}</h3>
 				</div>
 				<div class="col-md-5 contact-left">
 					<h3 class="title-style font-weight-bold mb-4">Address</h3>

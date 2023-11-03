@@ -291,6 +291,7 @@ def year_report(request):
 def veiw_report(request,order_id):
     order_details=Order.objects.get(id=order_id)
     order_items=Order.objects.get(id=order_id).new_order.all().select_related('item')
+    total=0
     addrress=Address.objects.get(id=order_details.del_add_id)
     context={'order_details':order_details,'order_items':order_items,'addrress':addrress}
     if request.method == "POST":
@@ -366,3 +367,10 @@ def view_coupon(request):
     coupons=Coupon.objects.all().order_by('-id')
     return render(request,"adm/view_coupon.html",{'coupons':coupons})
         
+def edit_coupon(request,coupon_id):
+    coupons=Coupon.objects.get(id=coupon_id)
+    if request.method == "POST":
+        coupons.status=request.POST['status']
+        coupons.save()
+        return redirect(view_coupon)
+    return render(request,"adm/edit_coupon.html",{'coupons':coupons})

@@ -67,6 +67,8 @@ def user_login(request):
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)      
 def user_logout(request):
+    if('coupon' in request.session):
+        del request.session['coupon']
     logout(request)
     # messages.info(request,"Logout Success")
     return redirect('/')
@@ -224,9 +226,24 @@ def checkout(request,ad_id):
     for p in crt:
         tot=tot+p.prd_var.cur_price * p.qty
     r_tot=tot*100
-    
-        
-    context={'crt':crt,'addr':addr,'tot':tot,'r_tot':r_tot}
+    pay_amount=tot
+    if request.method == "POST":
+        if request.POST.get("form_type") == 'apply':
+            code=request.POST['code']
+            if Coupon.objects.filter(code=code).exists():
+                coupon_id=Coupon.objects.get(code=str(code)).id
+                request.session['coupon']=coupon_id
+                print(request.session['coupon'])
+            else:
+                messages.info(request,"Invalid Coupon")
+        if request.POST.get("form_type") == 'cancel':
+            del request.session['coupon']
+    if('coupon' in request.session):
+        value=Coupon.objects.get(id=request.session['coupon']).value
+        pay_amount=tot-tot*(int(value)/100)
+        print(pay_amount)
+    coupons=Coupon.objects.filter(status=True)
+    context={'crt':crt,'addr':addr,'tot':tot,'r_tot':r_tot,'coupons':coupons,'pay_amount':pay_amount}
     return render(request,"user/checkout.html",context)
 
 
@@ -246,7 +263,14 @@ def create_order(request,ad_id):
         c.save()
         print(ord_item)
         ord_list.append(ord_item)
-    new_order=Order.objects.create(user=request.user,tot_amount=tot,del_add_id=ad_id,status="Pending")
+    if('coupon' in request.session):
+        value=Coupon.objects.get(id=request.session['coupon']).value
+        coupon_id=Coupon.objects.get(id=request.session['coupon']).id
+        tot=tot-tot*(int(value)/100)
+        new_order=Order.objects.create(user=request.user,tot_amount=tot,del_add_id=ad_id,coupon_apply_id=coupon_id,status="Pending")
+        del request.session['coupon']
+    else:
+        new_order=Order.objects.create(user=request.user,tot_amount=tot,del_add_id=ad_id,status="Pending")
     item_string=' '.join(item_list)  
     notification_description="Your order containing "+item_string+" has been placed." 
     notify=Notification(description=notification_description,user=request.user)
@@ -289,20 +313,16 @@ def orders(request):
     
 def ord_details(request,or_id):
     ord=Order.objects.get(id=or_id).new_order.all().select_related('item')
+    total=0
+    for o in ord:
+        total+=o.sub_tot
     ord_data=Order.objects.get(id=or_id)
     addr=Address.objects.get(id=ord_data.del_add_id)
-    # items={}
-    # for o in ord:
-    #     or_it=OrderItem.objects.get(id=o.id)
-    #     items['or_it']=or_it
-    # print(items)
-    # ord=OrderItem.objects.filter(id=or_id)
-    # ord=ord.annotate(
-    #     product_img=F('item__p1_img')
-    #     # Add more fields as needed
-    # )
-    # print(ord.query)
-    context={'ord':ord,'addr':addr,'ord_data':ord_data}
+    if(ord_data.coupon_apply):
+        coupon=Coupon.objects.get(id=ord_data.coupon_apply_id)
+        context={'ord':ord,'addr':addr,'ord_data':ord_data,'total':total,'coupon':coupon}
+    else:
+        context={'ord':ord,'addr':addr,'ord_data':ord_data,'total':total}
     return render(request,"user/order_details.html",context)
 
 def sample(request):
@@ -390,7 +410,14 @@ def invoice(request,or_id):
     ord=Order.objects.get(id=or_id).new_order.all().select_related('item')
     ord_data=Order.objects.get(id=or_id)
     addr=Address.objects.get(id=ord_data.del_add_id)
-    context={'ord':ord,'addr':addr,'ord_data':ord_data}
+    total=0
+    for o in ord:
+        total+=o.sub_tot
+    if(ord_data.coupon_apply):
+        coupon=Coupon.objects.get(id=ord_data.coupon_apply_id)
+        context={'ord':ord,'addr':addr,'ord_data':ord_data,'total':total,'coupon':coupon}
+    else:
+        context={'ord':ord,'addr':addr,'ord_data':ord_data,'total':total}
     html_string = get_template('user/invoice.html').render(context)
 
     # Convert HTML to PDF

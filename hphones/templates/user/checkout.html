@@ -392,7 +392,7 @@ RIGHT SIDEBAR TOGGLE SECTION
 		<div class="container py-md-5 py-4">
 			<div class="mx-auto pt-lg-4 pt-md-5 pt-4" style="max-width:1000px">
 				<div class="row contact-block">
-					<div class="col-md-5 contact-left">
+					<div class="col-md-4 contact-left">
 						<h3 class="title-style font-weight-bold mb-4">Order Items</h3>
                         {% for c in crt %}
 						<div class="cont-details">
@@ -406,12 +406,16 @@ RIGHT SIDEBAR TOGGLE SECTION
 							</div>
                             <br>
 							<h6>Total {{tot}}</h6>
+							{% if 'coupon' in request.session %}
+							
+							{% endif %}
+							<h6>Payable Amount {{pay_amount}}</h6>
 							
 							
 						</div>
                         {% endfor %}
 					</div>
-					<div class="col-md-5 contact-left">
+					<div class="col-md-4 contact-left">
 						<h3 class="title-style font-weight-bold mb-4">Address</h3>
 						<div class="cont-details">
 							<div class="d-flex contact-grid">
@@ -431,7 +435,51 @@ RIGHT SIDEBAR TOGGLE SECTION
 							</div>
 						</div>
 					</div>
-					
+					<div class="col-md-4 contact-left">
+						<h3 class="title-style font-weight-bold mb-4">Coupon</h3>
+						{% if 'coupon' in request.session %}
+						<div class="cont-details">
+							<div class="d-flex contact-grid">
+							  <form action="" method="post"  id="cancel">
+								{% csrf_token %}
+								<input type="hidden" name="form_type" value="cancel">
+							  <div class="cont-right" >
+								<h6>Coupon Applied</h6>
+								<div class="right-w3l">
+								  <input type="submit" class="form-control" value="Cancel">
+								</div>
+							  </div>
+							</form>
+							</div>
+						  </div>
+						{% else %}
+						{% if coupons %}
+						{% for code in coupons %}
+						<h6>{{code.code}}</h6>
+						{% endfor %}
+						{% endif %}
+						<div class="cont-details">
+
+						  <div class="d-flex contact-grid">
+							<form action="" method="post" id="apply">
+							  {% csrf_token %}
+							  <input type="hidden" name="form_type" value="apply">
+							<div class="cont-right" >
+							  <div class="form-group">
+								<input type="text" class="form-control" placeholder="Coupon Code" name="code" >
+							  </div>
+							  <div class="right-w3l">
+								<input type="submit" class="form-control" value="Apply">
+							  </div>
+							  {% for msg in messages %}
+								{{msg}}
+							  {% endfor %}
+							</div>
+						  </form>
+						  </div>
+						</div>
+						{% endif %}
+					  </div>
 				</div>
 				
 				<div class="col-md-5 contact-left">
