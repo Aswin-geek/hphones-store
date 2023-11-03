@@ -197,6 +197,7 @@
               <h5 class="card-title"></h5>
               <h4><a href="{% url "add_coupon" %}">Add Coupon</a></h4>
               <!-- Default Table -->
+              {% if coupons %}
               <table class="table">
                 <thead>
                   <tr>
@@ -218,6 +219,7 @@
                   
                 </tbody>
               </table>
+              {% endif %}
               <!-- End Default Table Example -->
             </div>
           </div>
