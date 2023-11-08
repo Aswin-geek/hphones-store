@@ -74,7 +74,8 @@ def user_logout(request):
     return redirect('/')
 
 def view_prod(request,pid):
-    cat=Category.objects.all()
+    cat=Category.objects.filter(cat_status=True)
+    brd=Brand.objects.filter(brd_status=True)
     prd=PrdVariation.objects.get(id=pid) # selected product data
     prd1=PrdVariation.objects.get(id=pid) # to get prd_id for product variation
     prdt=PrdVariation.objects.filter(prd_id_id=prd1.prd_id_id) # display other product variations
@@ -82,9 +83,9 @@ def view_prod(request,pid):
         ch_pr=Cart.objects.filter(prd_var=pid,user=request.user,val=False)
         wl_pr=Wishlist.objects.filter(item=pid,user=request.user)
     # pdimg=PrdImage.objects.get(prd_id=pid)
-        context={'cat':cat,'prd':prd,'prdt':prdt,'ch_pr':ch_pr,'wl_pr':wl_pr}
+        context={'cat':cat,'prd':prd,'prdt':prdt,'ch_pr':ch_pr,'wl_pr':wl_pr,'brd':brd}
         return render(request,"user/product.html",context)
-    context={'cat':cat,'prd':prd,'prdt':prdt,}
+    context={'cat':cat,'prd':prd,'prdt':prdt,'brd':brd}
     return render(request,"user/product.html",context)
 
 def brand_wise(request,bid):

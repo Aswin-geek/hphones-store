@@ -209,6 +209,7 @@
             <div class="card-body">
               <h5 class="card-title"></h5>
               <h4>Date : {{selected_date}}</h4>
+              <a href="{% url "export_date" selected_date %}" class="btn btn-primary rounded-pill">Export</a>
               <!-- Default Table -->             
               <table class="table">
                 <thead>

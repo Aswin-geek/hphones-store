@@ -29,5 +29,9 @@ urlpatterns = [
     path('add_coupon',add_coupon,name='add_coupon'),
     path('view_coupon',view_coupon,name='view_coupon'),
     path('edit_coupon<int:coupon_id>',edit_coupon,name='edit_coupon'),
+    path('export_report',export_report,name='export_report'),
+    path('export_date<str:selected_date>',export_date,name='export_date'),
+    path('export_week/<str:start_date>/<str:end_date>/',export_week,name='export_week'),
+    path('export_year<str:selected_year>',export_year,name='export_year'),
 ]
 

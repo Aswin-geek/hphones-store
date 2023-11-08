@@ -212,6 +212,8 @@
               
               <h5 class="card-title"></h5>
               <h4>From : {{start_date}}&nbsp;&nbsp;&nbsp;&nbsp;To : {{end_date}}</h4>
+              <a href="{% url "export_week" start_date end_date %}" class="btn btn-primary rounded-pill">Export</a>
+              
               <!-- Default Table -->
               
               <table class="table">

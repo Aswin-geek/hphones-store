@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,HttpResponse
 from django.contrib import messages
 from hps.models import *
 from django.contrib.auth.models import User
@@ -8,6 +8,8 @@ from django.contrib.auth.decorators import login_required
 from datetime import datetime
 from django.db.models import Count,Sum
 from django.db.models.functions import ExtractMonth,ExtractYear
+from django.template.loader import get_template
+from weasyprint import HTML
 # Create your views here.
 
 def adm_index(request):
@@ -374,3 +376,69 @@ def edit_coupon(request,coupon_id):
         coupons.save()
         return redirect(view_coupon)
     return render(request,"adm/edit_coupon.html",{'coupons':coupons})
+
+def export_report(request):
+    orders=Order.objects.all().select_related('user').order_by('-id')
+    context={'orders':orders}
+    html_string = get_template('adm/export_report.html').render(context)
+
+    # Convert HTML to PDF
+    html = HTML(string=html_string)
+    pdf_file = html.write_pdf()
+
+    # Create an HTTP response with the PDF
+    response = HttpResponse(pdf_file, content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="report_.pdf"'
+
+    return response
+
+def export_date(request,selected_date):
+    orders=Order.objects.filter(created_at=selected_date).order_by('-id')
+    string="Reports of date "+selected_date
+    context={'orders':orders,'string':string}
+    html_string = get_template('adm/export_report.html').render(context)
+
+    # Convert HTML to PDF
+    html = HTML(string=html_string)
+    pdf_file = html.write_pdf()
+
+    # Create an HTTP response with the PDF
+    response = HttpResponse(pdf_file, content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="report_.pdf"'
+
+    return response
+
+def export_week(request,start_date,end_date):
+    print(start_date)
+    print(end_date)
+    print(end_date)
+    orders=Order.objects.filter(created_at__range=(start_date, end_date)).order_by('-id')
+    string="Reports from "+start_date+" to "+end_date
+    context={'orders':orders,'string':string}
+    html_string = get_template('adm/export_report.html').render(context)
+
+    # Convert HTML to PDF
+    html = HTML(string=html_string)
+    pdf_file = html.write_pdf()
+
+    # Create an HTTP response with the PDF
+    response = HttpResponse(pdf_file, content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="report_.pdf"'
+
+    return response
+
+def export_year(request,selected_year):
+    orders=Order.objects.filter(created_at__year=selected_year).order_by('-id')
+    string="Reports of year "+selected_year
+    context={'orders':orders,'string':string}
+    html_string = get_template('adm/export_report.html').render(context)
+
+    # Convert HTML to PDF
+    html = HTML(string=html_string)
+    pdf_file = html.write_pdf()
+
+    # Create an HTTP response with the PDF
+    response = HttpResponse(pdf_file, content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="report_.pdf"'
+
+    return response

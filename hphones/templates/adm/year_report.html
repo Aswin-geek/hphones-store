@@ -207,6 +207,7 @@
             <div class="card-body">
               <h5 class="card-title"></h5>
               <h4>Year : {{selected_year}}</h4>
+              <a href="{% url "export_year" selected_year %}" class="btn btn-primary rounded-pill">Export</a>
               <!-- Default Table -->
               <table class="table">
                 <thead>
