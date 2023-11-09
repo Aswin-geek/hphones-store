@@ -446,7 +446,7 @@ RIGHT SIDEBAR TOGGLE SECTION
 
     <!-- js-files -->
     <!-- common jquery plugin -->
-    <script data-cfasync="false" src="../../../../../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="js/jquery-3.3.1.min.js"></script>
+    <script data-cfasync="false" src="../../../../../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="{% static "user/js/jquery-3.3.1.min.js" %}"></script>
     <!-- //common jquery plugin -->
 
     <!-- here stars scrolling icon -->
@@ -469,11 +469,11 @@ RIGHT SIDEBAR TOGGLE SECTION
     </script>
     <!-- //here ends scrolling icon -->
     <!-- js -->
-    <script src="js/jquery-1.11.1.min.js"></script>
+    <script src="{% static "user/js/jquery-1.11.1.min.js" %}"></script>
     <!-- //js -->
     <!-- start-smoth-scrolling -->
-    <script type="text/javascript" src="js/move-top.js"></script>
-    <script type="text/javascript" src="js/easing.js"></script>
+    <script type="text/javascript" src="{% static "user/js/move-top.js" %}"></script>
+    <script type="text/javascript" src="{% static "user/js/easing.js" %}"></script>
     <script type="text/javascript">
         jQuery(document).ready(function ($) {
             $(".scroll").click(function (event) {
@@ -504,7 +504,7 @@ RIGHT SIDEBAR TOGGLE SECTION
     <!-- //nav smooth scroll -->
 
     <!-- popup modal (for location)-->
-    <script src="js/jquery.magnific-popup.js"></script>
+    <script src="{% static "user/js/jquery.magnific-popup.js" %}"></script>
     <script>
         $(document).ready(function () {
             $('.popup-with-zoom-anim').magnificPopup({
@@ -524,7 +524,7 @@ RIGHT SIDEBAR TOGGLE SECTION
     <!-- //popup modal (for location)-->
 
     <!-- cart-js -->
-    <script src="js/minicart.js"></script>
+    <script src="{% static "user/js/minicart.js" %}"></script>
     <script>
         paypals.minicarts
             .render(); //use only unique class names other than paypals.minicarts.Also Replace same class name in css and minicart.min.js
@@ -570,7 +570,7 @@ RIGHT SIDEBAR TOGGLE SECTION
     <!-- //password-script -->
 
     <!-- theme switch js (light and dark)-->
-    <script src="js/theme-change.js"></script>
+    <script src="{% static "user/js/theme-change.js" %}"></script>
     <script>
         function autoType(elementClass, typingSpeed) {
             var thhis = $(elementClass);
@@ -619,7 +619,7 @@ RIGHT SIDEBAR TOGGLE SECTION
     <!-- //disable body scroll which navbar is in active -->
 
     <!--bootstrap-->
-    <script src="js/bootstrap.min.js"></script>
+    <script src="{% static "user/js/bootstrap.min.js" %}"></script>
     <!-- //bootstrap-->
     <!-- //Js scripts -->
 
